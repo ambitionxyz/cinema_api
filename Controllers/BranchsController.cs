@@ -8,7 +8,6 @@ namespace authen.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  [Authorize]
   public class BranchsController : ControllerBase
   {
     private readonly IBranchRepository _repository;
