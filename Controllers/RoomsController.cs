@@ -20,5 +20,20 @@ namespace authen.Controllers
       _mapper = mapper;
     }
 
+
+    [HttpGet]
+    public ActionResult<IEnumerable<RoomDTO>> GetRooms([FromQuery] int movieId, [FromQuery] int branchId,
+                                               [FromQuery] string startDate, [FromQuery] string startTime)
+    {
+      // Parse startDate and startTime to appropriate DateTime/TimeSpan objects
+      DateTime parsedStartDate = DateTime.Parse(startDate);
+      TimeSpan parsedStartTime = TimeSpan.Parse(startTime);
+
+      // Call the service method to get the rooms based on parameters
+      var rooms = _repository.GetRoomsByBranchAndMovieAndSchedule(movieId, branchId, parsedStartDate, parsedStartTime);
+
+      return Ok(_mapper.Map<IEnumerable<RoomDTO>>(rooms));
+    }
+
   }
 }

@@ -1,3 +1,4 @@
+using authen.Data;
 using authen.Dtos;
 using authen.Repositorys;
 using AutoMapper;
@@ -20,20 +21,24 @@ namespace authen.Controllers
     }
 
     [HttpGet("start-times")]
-    public ActionResult<List<string>> GetStartTimes([FromQuery] int movieId, [FromQuery] int branchId, [FromQuery] string startDate)
+    public ActionResult<IEnumerable<DateTime>> GetStartTimes([FromQuery] int movieId, [FromQuery] int branchId, [FromQuery] string startDate)
     {
-      if (!DateTime.TryParse(startDate, out var parsedDate))
+      try
+      {
+        DateTime.TryParse(startDate, out var parsedDate);
+
+        var startTimes = _repository.GetStartTimeByMovieIdBranchIdAndStartDate(movieId, branchId, parsedDate);
+        return Ok(startTimes);
+      }
+      catch (System.Exception)
       {
         return BadRequest("Invalid date format. Use yyyy-MM-dd.");
       }
 
-      var startTimes = _repository.GetStartTimeByMovieIdBranchIdAndStartDate(movieId, branchId, parsedDate);
-
-      return Ok(_mapper.Map<IEnumerable<ScheduleDTO>>(startTimes));
     }
 
     [HttpGet]
-    public ActionResult<List<ScheduleDTO>> GetSchedules([FromQuery] int movieId, [FromQuery] int branchId,
+    public ActionResult GetSchedules([FromQuery] int movieId, [FromQuery] int branchId,
        [FromQuery] string startDate, [FromQuery] string startTime, [FromQuery] int roomId)
     {
       if (!DateTime.TryParse(startDate, out var parsedDate) || !TimeSpan.TryParse(startTime, out var parsedTime))
@@ -42,8 +47,7 @@ namespace authen.Controllers
       }
 
       var schedules = _repository.GetSchedulesByFilters(movieId, branchId, parsedDate, parsedTime, roomId);
-
-      return Ok(_mapper.Map<IEnumerable<ScheduleDTO>>(schedules));
+      return Ok(schedules);
     }
 
   }

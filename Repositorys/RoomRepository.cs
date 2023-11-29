@@ -1,6 +1,7 @@
 
 using authen.Data;
 using authen.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace authen.Repositorys
 {
@@ -22,7 +23,8 @@ namespace authen.Repositorys
                          s.BranchId == branchId &&
                          s.StartDate == startDate.Date &&
                          s.StartTime == startTime
-                   select r).ToList();
+
+                   select r).Include(s => s.Branch).ToList();
 
       return rooms;
     }

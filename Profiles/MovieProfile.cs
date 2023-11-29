@@ -10,6 +10,7 @@ namespace authen.Profiles
     {
       //Source => target
       CreateMap<Movie, MovieDTO>();
+      CreateMap<MovieCreateDTO, Movie>();
 
     }
   }

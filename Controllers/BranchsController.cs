@@ -14,8 +14,7 @@ namespace authen.Controllers
     private readonly IBranchRepository _repository;
     private readonly IMapper _mapper;
 
-    public BranchsController(IBranchRepository repository,
-  IMapper mapper)
+    public BranchsController(IBranchRepository repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;

@@ -13,5 +13,7 @@ namespace authen.Repositorys
 
     public Movie GetById(int movieId);
 
+    public void CreateNewMovie(Movie movieDto);
+
   }
 }

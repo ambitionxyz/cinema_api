@@ -8,6 +8,6 @@ namespace authen.Repositorys
   {
     bool SaveChanges();
 
-
+    public IEnumerable<Room> GetRoomsByBranchAndMovieAndSchedule(int movieId, int branchId, DateTime startDate, TimeSpan startTime);
   }
 }

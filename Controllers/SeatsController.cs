@@ -25,23 +25,43 @@ namespace authen.Controllers
     }
 
 
-    [HttpGet]
-    public ActionResult<IEnumerable<SeatDTO>> GetSeatsByScheduleId([FromQuery] int scheduleId)
+    [HttpGet("{scheduleId}")]
+    public ActionResult GetSeatsByScheduleId(int scheduleId)
     {
+      System.Console.WriteLine($"---> scheduleId", scheduleId);
       // Lấy ra các chỗ ngồi của phòng trong lịch đó
-      var room = _scheduleRepository.GetById(scheduleId);
-      if (room == null)
+      var schedule = _scheduleRepository.GetById(scheduleId);
+      if (schedule == null)
       {
         return NotFound();
       }
-      IEnumerable<Seat> listSeat = _seatRepository.getSeatByRoom_Id(room.Room.Id);
+
+
+      var roomId = schedule.RoomId;
+      // "id": 1,
+      // "startDate": "2023-11-30T00:00:00",
+      // "startTime": "18:30:00",
+      // "price": 9.99,
+      // "movieId": 3,
+      // "movie": null,
+      // "branchId": 2,
+      // "branch": null,
+      // "roomId": 2,
+      // "room": null
+
+
+      var listSeat = _seatRepository.getSeatByRoom_Id(roomId);
       if (listSeat == null)
       {
         return NotFound();
       }
       // Lấy ra các vé đã được đặt trong lịch đó rồi map sang các chỗ ngồi
-      IEnumerable<Seat> occupiedSeats = (IEnumerable<Seat>)_ticketRepository.FindTicketsByScheduleId(scheduleId).ToList();
 
+      var occupiedSeats = _ticketRepository.FindTicketsByScheduleId(1);
+      foreach (var occupiedSeat in occupiedSeats)
+      {
+        System.Console.WriteLine($"---> ", occupiedSeat.Id);
+      }
       if (occupiedSeats == null)
       {
         return NotFound();
@@ -52,7 +72,7 @@ namespace authen.Controllers
           var seatDTO = new SeatDTO
           {
             Id = seat.Id,
-            // Map các thuộc tính khác của Seat sang SeatDTO ở đây
+
           };
           seatDTO.IsOccupied = occupiedSeats.Any(occupiedSeat => occupiedSeat.Id == seat.Id) ? 1 : 0;
           return seatDTO;

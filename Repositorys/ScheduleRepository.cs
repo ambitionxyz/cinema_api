@@ -1,6 +1,7 @@
 
 using authen.Data;
 using authen.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace authen.Repositorys
 {
@@ -17,16 +18,18 @@ namespace authen.Repositorys
     public IEnumerable<Schedule> GetSchedulesByFilters(int movieId, int branchId, DateTime startDate, TimeSpan startTime, int roomId)
     {
 
-      var startTimes = _context.schedules
-          .Where(s => s.MovieId == movieId &&
-                        s.BranchId == branchId &&
-                        s.StartDate == startDate &&
-                        s.StartTime == startTime &&
-                        s.RoomId == roomId)
-            .Distinct()
-            .ToList();
+      var schedules = _context.schedules
+        .Where(s => s.MovieId == movieId &&
+                    s.RoomId == roomId &&
+                    s.BranchId == branchId &&
+                    s.StartDate == startDate &&
+                    s.StartTime == startTime)
+        .Include(s => s.Movie) // Include để lấy thông tin của Movie
+        .Include(s => s.Room) // Include để lấy thông tin của Room
+        .Include(s => s.Branch) // Include để lấy thông tin của Room
+        .ToList();
 
-      return startTimes;
+      return schedules;
     }
 
     public IEnumerable<DateTime> GetStartTimeByMovieIdBranchIdAndStartDate(int movieId, int branchId, DateTime startDate)

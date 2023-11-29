@@ -10,5 +10,7 @@ namespace authen.Repositorys
 
     IEnumerable<Seat> getSeatByRoom_Id(int roomId);
 
+    public Seat GetById(int id);
+
   }
 }

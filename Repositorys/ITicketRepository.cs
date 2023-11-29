@@ -9,6 +9,10 @@ namespace authen.Repositorys
     bool SaveChanges();
 
     IEnumerable<Ticket> findTicketsByUserId(string userId);
-    public IEnumerable<Ticket> FindTicketsByScheduleId(int scheduleId);
+    public IEnumerable<Seat> FindTicketsByScheduleId(int scheduleId);
+
+    public IEnumerable<Ticket> FindTicketsBySchedule_IdAndSeat_Id(int scheduleId, int seatId);
+
+    public void CreateNewTicket(Ticket ticketDto);
   }
 }

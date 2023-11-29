@@ -33,9 +33,14 @@ namespace authen.Repositorys
       return movies;
     }
 
-
-
-
+    public void CreateNewMovie(Movie movieDto)
+    {
+      if (movieDto == null)
+      {
+        throw new ArgumentNullException(nameof(movieDto));
+      }
+      _context.Add(movieDto);
+    }
     public bool SaveChanges()
     {
       return (_context.SaveChanges() >= 0);

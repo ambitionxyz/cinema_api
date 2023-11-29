@@ -47,30 +47,11 @@ namespace authen.Controllers
     }
 
     [HttpPost]
-    public IActionResult UpdateMovie([FromBody] Movie movie)
+    public IActionResult UpdateMovie([FromBody] MovieCreateDTO movie)
     {
-      var movieUpdate = _repository.GetById(movie.Id);
 
-      if (movieUpdate == null)
-      {
-        return NotFound();
-      }
-
-      movieUpdate.SmallImageURL = movie.SmallImageURL;
-      movieUpdate.LargeImageURL = movie.LargeImageURL;
-      movie.Director = movie.Director;
-      movie.Actors = movie.Actors;
-      movie.Name = movie.Name;
-      movie.ShortDescription = movie.ShortDescription;
-      movie.LongDescription = movie.LongDescription;
-      movie.Categories = movie.Categories;
-      movie.ReleaseDate = movie.ReleaseDate;
-      movie.Duration = movie.Duration;
-      movie.TrailerURL = movie.TrailerURL;
-      movie.Language = movie.Language;
-      movie.Rated = movie.Rated;
-      movie.IsShowing = movie.IsShowing;
-
+      var movieModel = _mapper.Map<Movie>(movie);
+      _repository.CreateNewMovie(movieModel);
       _repository.SaveChanges();
       return Ok();
     }

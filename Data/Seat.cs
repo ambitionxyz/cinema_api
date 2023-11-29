@@ -3,19 +3,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace authen.Data
 {
-  [Table("seat")]
-  public class Seat
-  {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    [Table("seat")]
+    public class Seat
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
 
-    [ForeignKey("Room")]
-    [Column("room_id")]
-    public int RoomId { get; set; }
+        [ForeignKey("Room")]
+        [Column("room_id")]
+        public int RoomId { get; set; }
 
-    public Room Room { get; set; }
-  }
+        public Room? Room { get; set; }
+
+        public static implicit operator Seat(Schedule v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
