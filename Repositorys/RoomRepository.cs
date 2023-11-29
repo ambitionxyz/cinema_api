@@ -15,14 +15,14 @@ namespace authen.Repositorys
       _context = context;
     }
 
-    public IEnumerable<Room> GetRoomsByBranchAndMovieAndSchedule(int movieId, int branchId, DateTime startDate, TimeSpan startTime)
+    public IEnumerable<Room> GetRoomsByBranchAndMovieAndSchedule(int movieId, int branchId, string startDate, string startTime)
     {
       var rooms = (from r in _context.rooms
                    join s in _context.schedules on r.Id equals s.RoomId
                    where s.MovieId == movieId &&
                          s.BranchId == branchId &&
-                         s.StartDate == startDate.Date &&
-                         s.StartTime == startTime
+                         s.StartDate.ToString() == startDate &&
+                         s.StartTime.ToString() == startTime
 
                    select r).Include(s => s.Branch).ToList();
 

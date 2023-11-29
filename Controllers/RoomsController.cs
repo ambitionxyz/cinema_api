@@ -26,9 +26,8 @@ namespace authen.Controllers
                                                [FromQuery] string startDate, [FromQuery] string startTime)
     {
       // Parse startDate and startTime to appropriate DateTime/TimeSpan objects
-      DateTime parsedStartDate = DateTime.Parse(startDate);
-      TimeSpan parsedStartTime = TimeSpan.Parse(startTime);
-
+      string parsedStartDate = DateTime.Parse(startDate).ToString("yyyy-MM-dd HH:mm:ss.fffffff"); //"2023-11-30T00:00:00"
+      string parsedStartTime = TimeSpan.Parse(startTime).ToString(@"hh\:mm\:ss\.fffffff"); ; //"18:30:00"
       // Call the service method to get the rooms based on parameters
       var rooms = _repository.GetRoomsByBranchAndMovieAndSchedule(movieId, branchId, parsedStartDate, parsedStartTime);
 

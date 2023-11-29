@@ -48,11 +48,23 @@ namespace authen.Controllers
         //Lấy ra lịch
         Schedule schedule = _scheduleRepository.GetById((int)bookingRequestDTO.ScheduleId);
 
+        //         {
+        //   "id": 2,
+        //   "startDate": "2023-12-01T00:00:00",
+        //   "startTime": "14:00:00",
+        //   "price": 8.5,
+        //   "movieId": 4,
+        //   "movie": null,
+        //   "branchId": 1,
+        //   "branch": null,
+        //   "roomId": 2,
+        //   "room": null
+        // }
+
         if (schedule == null)
         {
           return NotFound();
         }
-
         //Lấy ra người dùng
         ApplicationUser user = await _userManager.FindByIdAsync(bookingRequestDTO.UserId);
 
@@ -76,11 +88,19 @@ namespace authen.Controllers
         //thì đóng gói các thông tin ghế và lịch vào vé và lưu xuống db
         foreach (var seatId in bookingRequestDTO.ListSeatIds)
         {
-          if (_ticketRepository.FindTicketsBySchedule_IdAndSeat_Id(schedule.Id, seatId) != null)
+
+          if (_ticketRepository.FindTicketsBySchedule_IdAndSeat_Id(schedule.Id, seatId).Any())
           {
             return await Task.FromResult(BadRequest("Đã có người nhanh tay hơn đặt ghế, mời bạn chọn lại!"));
 
           }
+
+          //           {
+          //   "id": 2,
+          //   "name": "Seat B",
+          //   "roomId": 1,
+          //   "room": null
+          // }
           var seat = _seatRepository.GetById(seatId);
 
           var ticket = new Ticket

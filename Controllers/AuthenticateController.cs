@@ -13,7 +13,7 @@ using System.Text;
 
 namespace authen.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
